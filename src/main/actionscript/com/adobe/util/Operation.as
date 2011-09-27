@@ -4,6 +4,10 @@ package com.adobe.util
 	 * Class to represent a 'diff operation'.  A diff operation
 	 * can be one of an equality, insertion, or deletion, accompanied
 	 * by the relevant text.
+	 * 
+	 * @author Charles Bihis (charles@whoischarles.com)
+	 * @langversion ActionScript 3.0
+	 * @playerversion Flash 10.0
 	 */
 	public class Operation
 	{

@@ -7,7 +7,7 @@ package com.adobe.util
 	 * algorithm, generally considered to be the best general-purpose
 	 * diff.
 	 * 
-	 * @author Charles Bihis
+	 * @author Charles Bihis (charles@whoischarles.com)
 	 * @langversion ActionScript 3.0
 	 * @playerversion Flash 10.0
 	 */
