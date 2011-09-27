@@ -1,35 +1,27 @@
 package com.adobe.util
 {
-	import flashx.textLayout.debug.assert;
-	
-	import mx.collections.ArrayCollection;
-	
 	public class Diff
 	{
-		public function Diff()
-		{
-		}
-		
-		public function diff(before:String, after:String):ArrayCollection
+		public function diff(before:String, after:String):Array
 		{
 			// Check for null inputs.
 			if (before == null || after == null)
 			{
 				throw new Error("Null inputs.");
-			}
+			}  // if statement
 			
 			// Check for equality.
-			var diffs:ArrayCollection;
+			var diffs:Array;
 			if (before == after)
 			{
-				diffs = new ArrayCollection();
+				diffs = new Array();
 				if (before.length != 0)
 				{
-					diffs.addItem(new Operation(Operation.EQUAL, before));
-				}
+					diffs.push(new Operation(Operation.EQUAL, before));
+				}  // if statement
 				
 				return diffs;
-			}
+			}  // if statement
 			
 			// Trim off common prefix.
 			var commonPrefixLength:int = getCommonPrefixLength(before, after);
@@ -43,86 +35,96 @@ package com.adobe.util
 			before = before.substring(0, before.length - commonSuffixLength);
 			after = after.substring(0, after.length - commonSuffixLength);
 			
-			diffs = diffCompute(before, after);
+			diffs = compute(before, after);
 			
 			// Restore the prefix and suffix.
 			if (commonPrefix.length != 0)
 			{
-				diffs.addItemAt(new Operation(Operation.EQUAL, commonPrefix), 0);
-			}
+				diffs.splice(0, 0, new Operation(Operation.EQUAL, commonPrefix));
+			}  // if statement
 			if (commonSuffix.length != 0)
 			{
-				diffs.addItem(new Operation(Operation.EQUAL, commonSuffix));
-			}
+				diffs.push(new Operation(Operation.EQUAL, commonSuffix));
+			}  // if statement
 			
 			diffs = merge(diffs);
 			return diffs;
-		}
+		}  // diff
 		
-		private function getCommonPrefixLength(before:String, after:String):int
+		/**
+		 * @private
+		 */
+		private function getCommonPrefixLength(stringA:String, stringB:String):int
 		{
-			var n:int = Math.min(before.length, after.length);
-			for (var i:int = 0; i < n; i++)
+			var count:int = Math.min(stringA.length, stringB.length);
+			for (var i:int = 0; i < count; i++)
 			{
-				if (before.charAt(i) != after.charAt(i))
+				if (stringA.charAt(i) != stringB.charAt(i))
 				{
 					return i;
-				}
-			}
+				}  // if statement
+			}  // for loop
 			
-			return n;
-		}
+			return count;
+		}  // getCommonPrefixLengths
 		
+		/**
+		 * @private
+		 */
 		private function getCommonSuffixLength(before:String, after:String):int
 		{
-			var n:int = Math.min(before.length, after.length);
-			for (var i:int = 1; i <= n; i++)
+			var count:int = Math.min(before.length, after.length);
+			for (var i:int = 1; i <= count; i++)
 			{
 				if (before.charAt(before.length - i) != after.charAt(after.length - i))
 				{
 					return i - 1;
-				}
-			}
+				}  // if statement
+			}  // for loop
 			
-			return n;
-		}
+			return count;
+		}  // getCommonSuffixLength
 		
-		private function diffCompute(before:String, after:String):ArrayCollection
+		/**
+		 * @private
+		 */
+		private function compute(before:String, after:String):Array
 		{
-			var diffs:ArrayCollection = new ArrayCollection();
+			var diffs:Array = new Array();
 			
+			// Check if we just added text.
 			if (before.length == 0)
 			{
-				diffs.addItem(new Operation(Operation.INSERT, after));
+				diffs.push(new Operation(Operation.INSERT, after));
 				return diffs;
-			}
+			}  // if statement
 			
+			// Check if we just deleted text.
 			if (after.length == 0)
 			{
-				diffs.addItem(new Operation(Operation.DELETE, before));
+				diffs.push(new Operation(Operation.DELETE, before));
 				return diffs;
-			}
+			}  // if statement
 			
 			var longText:String = (before.length > after.length) ? before : after;
 			var shortText:String = (before.length > after.length) ? after : before;
 			
-			var i:int = longText.indexOf(shortText);
-			
 			// Shorter text is inside of the longer text.
+			var i:int = longText.indexOf(shortText);
 			if (i >= 0)
 			{
 				var op:String = before.length > after.length ? Operation.DELETE : Operation.INSERT;
-				diffs.addItem(new Operation(op, longText.substring(0, i)));
-				diffs.addItem(new Operation(Operation.EQUAL, shortText));
-				diffs.addItem(new Operation(op, longText.substring(i + shortText.length)));
+				diffs.push(new Operation(op, longText.substring(0, i)));
+				diffs.push(new Operation(Operation.EQUAL, shortText));
+				diffs.push(new Operation(op, longText.substring(i + shortText.length)));
 				return diffs;
 			}
 			
 			// Single character string.  After the previous check, the character can't be an equality.
 			if (shortText.length == 1)
 			{
-				diffs.addItem(new Operation(Operation.DELETE, before));
-				diffs.addItem(new Operation(Operation.INSERT, after));
+				diffs.push(new Operation(Operation.DELETE, before));
+				diffs.push(new Operation(Operation.INSERT, after));
 				return diffs;
 			}
 			
@@ -131,30 +133,33 @@ package com.adobe.util
 			shortText = null;
 			
 			// Check to see if the problem can be split in two.
-			var halfMatch:ArrayCollection = diffHalfMatch(before, after);
+			var halfMatch:Array = diffHalfMatch(before, after);
 			if (halfMatch != null)
 			{
-				var beforeA:String = halfMatch.getItemAt(0).toString();
-				var beforeB:String = halfMatch.getItemAt(1).toString();
-				var afterA:String = halfMatch.getItemAt(2).toString();
-				var afterB:String = halfMatch.getItemAt(3).toString();
-				var midCommon:String = halfMatch.getItemAt(4).toString();
+				var beforeA:String = halfMatch[0];
+				var beforeB:String = halfMatch[1];
+				var afterA:String = halfMatch[2];
+				var afterB:String = halfMatch[3];
+				var midCommon:String = halfMatch[4];
 				
 				// Send both pairs off for separate processing.
-				var diffsA:ArrayCollection = diff(beforeA, afterA);
-				var diffsB:ArrayCollection = diff(beforeB, afterB);
+				var diffsA:Array = diff(beforeA, afterA);
+				var diffsB:Array = diff(beforeB, afterB);
 				
 				// Merge the results
-				diffs = diffsA;
-				diffs.addItem(new Operation(Operation.EQUAL, midCommon));
-				diffs.addAll(diffsB);
+				diffs = diffsA
+				diffs.push(new Operation(Operation.EQUAL, midCommon));
+				for (var i:int = 0; i < diffsB.length; i++)
+				{
+					diffs.push(diffsB[i]);
+				}
 				return diffs;
 			}
 			
 			return bisect(before, after);
 		}
 		
-		private function diffHalfMatch(before:String, after:String):ArrayCollection
+		private function diffHalfMatch(before:String, after:String):Array
 		{
 			var longText:String = before.length > after.length ? before : after;
 			var shortText:String = before.length > after.length ? after : before;
@@ -165,12 +170,12 @@ package com.adobe.util
 			}
 			
 			// First, check if the second quarter is the seed for the half-match.
-			var tempHalfMatch1:ArrayCollection = diffHalfMatchSub(longText, shortText, (longText.length + 3) / 4);
+			var tempHalfMatch1:Array = diffHalfMatchSub(longText, shortText, (longText.length + 3) / 4);
 			
 			// Check again based on the third quarter.
-			var tempHalfMatch2:ArrayCollection = diffHalfMatchSub(longText, shortText, (longText.length + 1) / 2);
+			var tempHalfMatch2:Array = diffHalfMatchSub(longText, shortText, (longText.length + 1) / 2);
 			
-			var halfMatch:ArrayCollection;
+			var halfMatch:Array;
 			if (tempHalfMatch1 == null && tempHalfMatch2 == null)
 			{
 				return null;
@@ -186,7 +191,7 @@ package com.adobe.util
 			else
 			{
 				// Both matched.  Select the longest.
-				halfMatch = tempHalfMatch1.getItemAt(4).length > tempHalfMatch2.getItemAt(4).length ? tempHalfMatch1 : tempHalfMatch2;
+				halfMatch = tempHalfMatch1[4].length > tempHalfMatch2[4].length ? tempHalfMatch1 : tempHalfMatch2;
 			}
 			
 			// A half-match was found, sort out the return data.
@@ -196,17 +201,17 @@ package com.adobe.util
 			}
 			else
 			{
-				var newHalfMatch:ArrayCollection = new ArrayCollection();
-				newHalfMatch.addItem(halfMatch.getItemAt(2));
-				newHalfMatch.addItem(halfMatch.getItemAt(3));
-				newHalfMatch.addItem(halfMatch.getItemAt(0));
-				newHalfMatch.addItem(halfMatch.getItemAt(1));
-				newHalfMatch.addItem(halfMatch.getItemAt(4));
+				var newHalfMatch:Array = new Array();
+				newHalfMatch.push(halfMatch[2]);
+				newHalfMatch.push(halfMatch[3]);
+				newHalfMatch.push(halfMatch[0]);
+				newHalfMatch.push(halfMatch[1]);
+				newHalfMatch.push(halfMatch[4]);
 				return newHalfMatch;
 			}
 		}
 		
-		private function diffHalfMatchSub(longText:String, shortText:String, i:int):ArrayCollection
+		private function diffHalfMatchSub(longText:String, shortText:String, i:int):Array
 		{
 			// Start with a 1/4 length substring at position i as a seed.
 			var seed:String = longText.substring(i, i + longText.length / 4);
@@ -234,12 +239,12 @@ package com.adobe.util
 			
 			if (bestCommon.length * 2 >= longText.length)
 			{
-				var halfMatchSub:ArrayCollection = new ArrayCollection();
-				halfMatchSub.addItem(bestLongTextA);
-				halfMatchSub.addItem(bestLongTextB);
-				halfMatchSub.addItem(bestShortTextA);
-				halfMatchSub.addItem(bestShortTextB);
-				halfMatchSub.addItem(bestCommon);
+				var halfMatchSub:Array = new Array();
+				halfMatchSub.push(bestLongTextA);
+				halfMatchSub.push(bestLongTextB);
+				halfMatchSub.push(bestShortTextA);
+				halfMatchSub.push(bestShortTextB);
+				halfMatchSub.push(bestCommon);
 				return halfMatchSub;
 			}
 			else
@@ -248,7 +253,7 @@ package com.adobe.util
 			}
 		}
 		
-		private function bisect(before:String, after:String):ArrayCollection
+		private function bisect(before:String, after:String):Array
 		{
 			// Cache the text lengths to prevent multiple calls.
 			var beforeLength:int = before.length;
@@ -257,15 +262,19 @@ package com.adobe.util
 			var vOffset:int = maxD;
 			var vLength:int = maxD * 2;
 			
-			var v1:ArrayCollection = new ArrayCollection(new Array(vLength));
-			var v2:ArrayCollection = new ArrayCollection(new Array(vLength));
+			var v1:Array = new Array(vLength);
+			var v2:Array = new Array(vLength);
 			for (var i:int = 0; i < vLength; i++)
 			{
-				v1.setItemAt(-1, i);
-				v2.setItemAt(-1, i);
+				//				v1.setItemAt(-1, i);
+				//				v2.setItemAt(-1, i);
+				v1[i] = -1;
+				v2[i] = -1;
 			}
-			v1.setItemAt(0, vOffset + 1);
-			v2.setItemAt(0, vOffset + 1);
+			//			v1.setItemAt(0, vOffset + 1);
+			//			v2.setItemAt(0, vOffset + 1);
+			v1[vOffset + 1] = 0;
+			v2[vOffset + 1] = 0;
 			
 			var delta:int = beforeLength - afterLength;
 			
@@ -287,13 +296,13 @@ package com.adobe.util
 					var k1Offset:int = vOffset + k1;
 					var x1:int;
 					
-					if (k1 == -d || k1 != d && v1.getItemAt(k1Offset - 1) < v1.getItemAt(k1Offset + 1))
+					if (k1 == -d || k1 != d && v1[k1Offset - 1] < v1[k1Offset + 1])
 					{
-						x1 = int(v1.getItemAt(k1Offset + 1));
+						x1 = int(v1[k1Offset + 1]);
 					}
 					else
 					{
-						x1 = v1.getItemAt(k1Offset - 1) + 1;
+						x1 = v1[k1Offset - 1] + 1;
 					}
 					
 					var y1:int = x1 - k1;
@@ -304,7 +313,8 @@ package com.adobe.util
 						y1++;
 					}
 					
-					v1.setItemAt(x1, k1Offset);
+					//					v1.setItemAt(x1, k1Offset);
+					v1[k1Offset] = x1;
 					
 					if (x1 > beforeLength)
 					{
@@ -320,10 +330,10 @@ package com.adobe.util
 					{
 						var k2Offset:int = vOffset + delta - k1;
 						
-						if (k2Offset >= 0 && k2Offset < vLength && v2.getItemAt(k2Offset) != -1)
+						if (k2Offset >= 0 && k2Offset < vLength && v2[k2Offset] != -1)
 						{
 							// Mirror x2 onto top-left coordinate system.
-							var x2:int = beforeLength - int(v2.getItemAt(k2Offset));
+							var x2:int = beforeLength - int(v2[k2Offset]);
 							
 							if (x1 >= x2)
 							{
@@ -340,13 +350,13 @@ package com.adobe.util
 					var k2Offset:int = vOffset + k2;
 					var x2:int;
 					
-					if (k2 == -d || k2 != d && v2.getItemAt(k2Offset - 1) < v2.getItemAt(k2Offset + 1))
+					if (k2 == -d || k2 != d && v2[k2Offset - 1] < v2[k2Offset + 1])
 					{
-						x2 = int(v2.getItemAt(k2Offset + 1));
+						x2 = int(v2[k2Offset + 1]);
 					}
 					else
 					{
-						x2 = v2.getItemAt(k2Offset - 1) + 1;
+						x2 = v2[k2Offset - 1] + 1;
 					}
 					
 					var y2:int = x2 - k2;
@@ -357,7 +367,8 @@ package com.adobe.util
 						y2++;
 					}
 					
-					v2.setItemAt(x2, k2Offset);
+					//					v2.setIemAt(x2, k2Offset);
+					v2[k2Offset] = x2;
 					
 					if (x2 > beforeLength)
 					{
@@ -372,9 +383,9 @@ package com.adobe.util
 					else if (!front)
 					{
 						var k1Offset:int = vOffset + delta - k2;
-						if (k1Offset >= 0 && k1Offset < vLength && v1.getItemAt(k1Offset) != -1)
+						if (k1Offset >= 0 && k1Offset < vLength && v1[k1Offset] != -1)
 						{
-							var x1:int = int(v1.getItemAt(k1Offset));
+							var x1:int = int(v1[k1Offset]);
 							var y1:int = vOffset + x1 - k1Offset;
 							
 							// Mirror x2 onto top-left coordinate system.
@@ -390,15 +401,14 @@ package com.adobe.util
 				}  // reverse path for loop
 			}  // for loop
 			
-			// The number of diffs equals the number of characters,
-			// so no commonality at all.
-			var diffs:ArrayCollection = new ArrayCollection();
-			diffs.addItem(new Operation(Operation.DELETE, before));
-			diffs.addItem(new Operation(Operation.INSERT, after));
+			// The number of diffs equals the number of characters, so no commonality at all.
+			var diffs:Array = new Array();
+			diffs.push(new Operation(Operation.DELETE, before));
+			diffs.push(new Operation(Operation.INSERT, after));
 			return diffs;
 		}  // bisect
 		
-		private function bisectSplit(before:String, after:String, x:int, y:int):ArrayCollection
+		private function bisectSplit(before:String, after:String, x:int, y:int):Array
 		{
 			var beforeA:String = before.substring(0, x);
 			var beforeB:String = before.substring(x);
@@ -406,17 +416,20 @@ package com.adobe.util
 			var afterB:String = after.substring(y);
 			
 			// Compute both diffs serially.
-			var diffsA:ArrayCollection = diff(beforeA, afterA);
-			var diffsB:ArrayCollection = diff(beforeB, afterB);
+			var diffsA:Array = diff(beforeA, afterA);
+			var diffsB:Array = diff(beforeB, afterB);
 			
-			diffsA.addAll(diffsB);
+			for (var i:int = 0; i < diffsB.length; i++)
+			{
+				diffsA.push(diffsB[i]);
+			}
 			
 			return diffsA;
 		}
 		
-		private function merge(diffs:ArrayCollection):ArrayCollection
+		private function merge(diffs:Array):Array
 		{
-			diffs.addItem(new Operation(Operation.EQUAL, ""));	// Add a dummy entry at the end.
+			diffs.push(new Operation(Operation.EQUAL, ""));	// Add a dummy entry at the end.
 			
 			var count_delete:int = 0;
 			var count_insert:int = 0;
@@ -425,7 +438,8 @@ package com.adobe.util
 			var text_insert:String = "";
 			
 			var pointer:int = 0;
-			var thisDiff:Operation = diffs.getItemAt(pointer) as Operation;
+			//			var thisDiff:Operation = diffs.getItemAt(pointer) as Operation;
+			var thisDiff:Operation = diffs[pointer] as Operation;
 			var prevEqual:Operation = null;
 			var commonlength:int;
 			
@@ -452,12 +466,14 @@ package com.adobe.util
 							pointer--;
 							while (count_delete-- > 0)
 							{
-								diffs.removeItemAt(pointer);
+								//								diffs.removeItemAt(pointer);
+								diffs.splice(pointer, 1);
 								pointer--;
 							}
 							while (count_insert-- > 0)
 							{
-								diffs.removeItemAt(pointer);
+								//								diffs.removeItemAt(pointer);
+								diffs.splice(pointer, 1);
 								pointer--;
 							}
 							
@@ -476,7 +492,8 @@ package com.adobe.util
 									}
 									else
 									{
-										diffs.addItemAt(new Operation(Operation.EQUAL, text_insert.substring(0, commonlength)), pointer);
+										//										diffs.addItemAt(new Operation(Operation.EQUAL, text_insert.substring(0, commonlength)), pointer);
+										diffs.splice(pointer, 0, new Operation(Operation.EQUAL, text_insert.substring(0, commonlength)));
 									}
 									
 									text_insert = text_insert.substring(commonlength);
@@ -498,22 +515,25 @@ package com.adobe.util
 							// Insert the merged records.
 							if (text_delete.length != 0)
 							{
-								diffs.addItemAt(new Operation(Operation.DELETE, text_delete), ++pointer);
+								//								diffs.addItemAt(new Operation(Operation.DELETE, text_delete), ++pointer);
+								diffs.splice(++pointer, 0, new Operation(Operation.DELETE, text_delete));
 							}
 							if (text_insert.length != 0)
 							{
-								diffs.addItemAt(new Operation(Operation.INSERT, text_insert), ++pointer);
+								//								diffs.addItemAt(new Operation(Operation.INSERT, text_insert), ++pointer);
+								diffs.splice(++pointer, 0, new Operation(Operation.INSERT, text_insert));
 							}
 							
 							// Step forward to the equality.
-							thisDiff = pointer < diffs.length ? diffs.getItemAt(++pointer) as Operation : null;
+							thisDiff = pointer < diffs.length ? diffs[++pointer] as Operation : null;
 						}
 						else if (prevEqual != null)
 						{
 							// Merge this equality with the previous one.
 							prevEqual.string += thisDiff.string;
-							diffs.removeItemAt(pointer);
-							thisDiff = diffs.getItemAt(--pointer) as Operation;
+							//							diffs.removeItemAt(pointer);
+							diffs.splice(pointer, 1);
+							thisDiff = diffs[--pointer] as Operation;
 							pointer++;
 						}
 						
@@ -525,12 +545,13 @@ package com.adobe.util
 						break;
 				}  // switch
 				
-				thisDiff = pointer < diffs.length - 1 ? diffs.getItemAt(++pointer) as Operation : null;
+				thisDiff = pointer < diffs.length - 1 ? diffs[++pointer] as Operation : null;
 			}  // while
 			
-			if (diffs.getItemAt(diffs.length - 1).string.length == 0)
+			if (diffs[diffs.length - 1].string.length == 0)
 			{
-				diffs.removeItemAt(diffs.length - 1);	// Remove the dummy entry at the end.
+				//				diffs.removeItemAt(diffs.length - 1);	// Remove the dummy entry at the end.
+				diffs.splice(diffs.length - 1, 1);
 			}
 			
 			// Second pass.
@@ -542,9 +563,9 @@ package com.adobe.util
 			
 			// Reset our pointer.
 			pointer = 0;
-			var prevDiff:Operation = pointer < diffs.length ? diffs.getItemAt(pointer++) as Operation : null;
-			thisDiff = pointer < diffs.length ? diffs.getItemAt(pointer++) as Operation : null;
-			var nextDiff:Operation = pointer < diffs.length ? diffs.getItemAt(pointer++) as Operation : null;
+			var prevDiff:Operation = pointer < diffs.length ? diffs[pointer++] as Operation : null;
+			thisDiff = pointer < diffs.length ? diffs[pointer++] as Operation : null;
+			var nextDiff:Operation = pointer < diffs.length ? diffs[pointer++] as Operation : null;
 			
 			// Intentionally ignore the first and last element (doesn't need checking).
 			while (nextDiff != null)
@@ -571,7 +592,8 @@ package com.adobe.util
 						// Shift the edit over the next equality.
 						prevDiff.string += nextDiff.string;
 						thisDiff.string = thisDiff.string.substring(nextDiff.string.length) + nextDiff.string;
-						diffs.removeItemAt(--pointer);
+						//						diffs.removeItemAt(--pointer);
+						diffs.splice(--pointer, 1);
 						nextDiff = pointer < diffs.length ? diffs.getItemAt(++pointer) as Operation : null;
 						changes = true;
 					}
@@ -579,7 +601,7 @@ package com.adobe.util
 				
 				prevDiff = thisDiff;
 				thisDiff = nextDiff;
-				nextDiff = pointer < diffs.length ? diffs.getItemAt(pointer++) as Operation : null;
+				nextDiff = pointer < diffs.length ? diffs[pointer++] as Operation : null;
 			}  // while
 			
 			// If shifts were made, the diff needs re-ordering and another shift sweep.
