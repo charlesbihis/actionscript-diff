@@ -4,6 +4,9 @@ the google-diff-match-patch project written by Neil Fraser of Google.
 
 Dependencies:
   -as3corelib (https://github.com/mikechambers/as3corelib)
+
+Demo:
+  -actionscript-diff-demo (https://github.com/charlesbihis/actionscript-diff-demo)
   
 See:
   -"An O(ND) Difference Algorithm and Its Variations" by Eugene W. Meyers (http://neil.fraser.name/software/diff_match_patch/myers.pdf)
