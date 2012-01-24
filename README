@@ -3,11 +3,11 @@ port from the Java implentation of the algorithm as is provided by
 the google-diff-match-patch project written by Neil Fraser of Google.
 
 Dependencies:
-  -as3corelib (https://github.com/mikechambers/as3corelib)
+	-as3corelib (https://github.com/mikechambers/as3corelib)
 
 Demo:
-  -actionscript-diff-demo (https://github.com/charlesbihis/sandbox/tree/master/actionscript/actionscript-diff-demo)
+	-actionscript-diff-demo (https://github.com/charlesbihis/sandbox/tree/master/actionscript/actionscript-diff-demo)
   
 See:
-  -"An O(ND) Difference Algorithm and Its Variations" by Eugene W. Meyers (http://neil.fraser.name/software/diff_match_patch/myers.pdf)
-  -google-diff-match-patch (http://code.google.com/p/google-diff-match-patch/)
+	-"An O(ND) Difference Algorithm and Its Variations" by Eugene W. Meyers (http://neil.fraser.name/software/diff_match_patch/myers.pdf)
+	-google-diff-match-patch (http://code.google.com/p/google-diff-match-patch/)
