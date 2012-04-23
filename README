@@ -1,5 +1,5 @@
 An ActionScript 3 implementation of the Myer's diff algorithm.  This is a
-port from the Java implentation of the algorithm as is provided by
+port from the Java implementation of the algorithm as is provided by
 the google-diff-match-patch project written by Neil Fraser of Google.
 
 Dependencies:
