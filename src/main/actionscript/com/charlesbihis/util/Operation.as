@@ -1,4 +1,4 @@
-package com.adobe.util
+package com.charlesbihis.util
 {
 	/**
 	 * Class to represent a 'diff operation'.  A diff operation

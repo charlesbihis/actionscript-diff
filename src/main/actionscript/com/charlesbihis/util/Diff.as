@@ -1,4 +1,4 @@
-package com.adobe.util
+package com.charlesbihis.util
 {
 	import com.adobe.utils.StringUtil;
 	
