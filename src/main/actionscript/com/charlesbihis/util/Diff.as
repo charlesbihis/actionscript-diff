@@ -7,9 +7,7 @@ package com.charlesbihis.util
 	 * algorithm, generally considered to be the best general-purpose
 	 * diff.
 	 * 
-	 * @author Charles Bihis (charles@whoischarles.com)
-	 * @langversion ActionScript 3.0
-	 * @playerversion Flash 10.0
+	 * @author Charles Bihis (wwww.whoischarles.com)
 	 */
 	public class Diff
 	{

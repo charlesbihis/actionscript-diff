@@ -5,9 +5,7 @@ package com.charlesbihis.util
 	 * can be one of an equality, insertion, or deletion, accompanied
 	 * by the relevant text.
 	 * 
-	 * @author Charles Bihis (charles@whoischarles.com)
-	 * @langversion ActionScript 3.0
-	 * @playerversion Flash 10.0
+	 * @author Charles Bihis (www.whoischarles.com)
 	 */
 	public class Operation
 	{
