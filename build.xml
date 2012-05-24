@@ -1,0 +1,21 @@
+<project xmlns:artifact="urn:maven-artifact-ant" default="compile">
+
+	<!-- define FLEX_HOME directory -->
+	<property name="FLEX_HOME" value="C:/Program Files (x86)/Adobe/Adobe Flash Builder 4.5" />
+	
+	<!-- enable Flex Ant Tasks -->
+	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
+	
+	<!-- clean -->
+	<target name="clean" description="Clean generated build files">
+		<delete file="HelloWorld.swf" />
+	</target>
+	
+	<!-- compile -->
+	<target name="compile" description="Compile our project" depends="clean">
+		<mxmlc file="HelloWorld.mxml" output="HelloWorld.swf">
+			<source-path path-element="." />
+		</mxmlc>
+	</target>
+
+</project>
