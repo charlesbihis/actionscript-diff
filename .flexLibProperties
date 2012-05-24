@@ -3,7 +3,6 @@
   <includeClasses>
     <classEntry path="com.charlesbihis.util.Diff"/>
     <classEntry path="com.charlesbihis.util.Operation"/>
-    <classEntry path="com.charlesbihis.util.DiffTest"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
