@@ -1,4 +1,4 @@
-package com.adobe.util
+package com.charlesbihis.util
 {
 	public class DiffTest
 	{
