@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="actionscript-diff : An ActionScript 3 implementation of the Myer's diff algorithm" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>actionscript-diff</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/charlesbihis/actionscript-diff">View on GitHub</a>
+
+          <h1 id="project_title">actionscript-diff</h1>
+          <h2 id="project_tagline">An ActionScript 3 implementation of the Myer's diff algorithm</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/charlesbihis/actionscript-diff/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/charlesbihis/actionscript-diff/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>ActionScript Diff Library</h1>
+
+<p>An ActionScript 3 implementation of a diff algorithm.</p>
+
+<h2>Overview</h2>
+
+<p>This library provides an ActionScript 3 implementation of the Myer's diff algorithm.  This is a port from the Java implementation of the algorithm as is provided by the <a href="http://code.google.com/p/google-diff-match-patch/">google-diff-match-patch project</a> written by Neil Fraser of Google.</p>
+
+<p>This project was first mentioned in my blog post at <a href="http://blogs.adobe.com/charles/2011/12/diff-library-for-actionscript.html">http://blogs.adobe.com/charles/2011/12/diff-library-for-actionscript.html</a>.</p>
+
+<h3>Features</h3>
+
+<p>The ActionScript Diff Library supports the following features...</p>
+
+<ul>
+<li>Simple API to interact with the diff algorithm</li>
+<li>Returns diff boundaries of letters which have changed, and letters which haven't</li>
+<li>Pure AS3 implementation (no Flex SDK required)</li>
+<li>Documentation!</li>
+</ul><h3>Dependencies</h3>
+
+<ul>
+<li><a href="https://github.com/mikechambers/as3corelib">as3corelib</a></li>
+</ul><h2>Reference</h2>
+
+<h3>Usage</h3>
+
+<p>To use the library, simply drop in the SWC (or the source) into your project, along with the appropriate dependencies, and follow the usage below...</p>
+
+<pre><code>var diffs:Array = new Diff().diff(beforeText.text, afterText.text);
+</code></pre>
+
+<p>The result that you get back is an Array of the different operations that it took to go from the original string to the modified string. You can easily use this to display the differences in whatever way you want.</p>
+
+<h3>Demo</h3>
+
+<ul>
+<li>Live demo: <a href="http://blogs.adobe.com/charles/2011/12/diff-library-for-actionscript.html">http://blogs.adobe.com/charles/2011/12/diff-library-for-actionscript.html</a>
+</li>
+<li>Demo source: <a href="https://github.com/charlesbihis/sandbox/tree/master/actionscript/actionscript-diff-demo">https://github.com/charlesbihis/sandbox/tree/master/actionscript/actionscript-diff-demo</a>
+</li>
+</ul><h3>Documentation</h3>
+
+<p>You can find the full ASDocs for the project <a href="http://charlesbihis.github.com/actionscript-diff/docs/">here</a>.</p>
+
+<h3>Relevant</h3>
+
+<ul>
+<li>"An O(ND) Difference Algorithm and Its Variations" by Eugene W. Meyers (<a href="http://neil.fraser.name/software/diff_match_patch/myers.pdf">http://neil.fraser.name/software/diff_match_patch/myers.pdf</a>)</li>
+<li>Google project google-diff-match-patch (<a href="http://code.google.com/p/google-diff-match-patch/">http://code.google.com/p/google-diff-match-patch/</a>)</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">actionscript-diff maintained by <a href="https://github.com/charlesbihis">charlesbihis</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
