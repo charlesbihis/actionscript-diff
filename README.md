@@ -44,3 +44,14 @@ You can find the full ASDocs for the project [here](http://charlesbihis.github.c
 
 * "An O(ND) Difference Algorithm and Its Variations" by Eugene W. Meyers (http://neil.fraser.name/software/diff_match_patch/myers.pdf)
 * Google project google-diff-match-patch (http://code.google.com/p/google-diff-match-patch/)
+
+## Author
+
+* Created by Charles Bihis
+* Website: [www.whoischarles.com](http://www.whoischarles.com)
+* E-mail: [charles@whoischarles.com](mailto:charles@whoischarles.com)
+* Twitter: [@charlesbihis](http://www.twitter.com/charlesbihis)
+
+## License
+
+The ActionScript Diff Library is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
