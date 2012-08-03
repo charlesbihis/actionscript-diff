@@ -563,7 +563,7 @@ package com.charlesbihis.util
 								{
 									if (pointer > 0)
 									{
-										thisDiff = diffs.getItemAt(--pointer) as Operation;
+										thisDiff = diffs[--pointer] as Operation;
 										
 										// Sanity check.
 										if (thisDiff.op != Operation.EQUAL)
@@ -587,7 +587,7 @@ package com.charlesbihis.util
 								commonlength = getCommonSuffixLength(textInsert, textDelete);
 								if (commonlength != 0)
 								{
-									thisDiff = diffs.getItemAt(++pointer) as Operation;
+									thisDiff = diffs[++pointer] as Operation;
 									thisDiff.string = textInsert.substring(textInsert.length - commonlength) + thisDiff.string;
 									textInsert = textInsert.substring(0, textInsert.length - commonlength);
 									textDelete = textDelete.substring(0, textDelete.length - commonlength);
@@ -659,10 +659,10 @@ package com.charlesbihis.util
 						pointer--;											// Walk past nextDiff.
 						pointer--;											// Walk past thisDiff.
 						pointer--;											// Walk past prevDiff.
-						diffs.removeItemAt(pointer);						// Delete prevDiff.
+						diffs.splice(pointer, 1);							// Delete prevDiff.
 						pointer++;											// Walk past thisDiff.
-						thisDiff = diffs.getItemAt(++pointer) as Operation;	// Walk past nextDiff.
-						nextDiff = pointer < diffs.length ? diffs.getItemAt(++pointer) as Operation : null;
+						thisDiff = diffs[++pointer] as Operation;			// Walk past nextDiff.
+						nextDiff = pointer < diffs.length ? diffs[++pointer] as Operation : null;
 						changes = true;
 					}  // if statement
 					else if (StringUtil.beginsWith(thisDiff.string, nextDiff.string))
@@ -671,7 +671,7 @@ package com.charlesbihis.util
 						prevDiff.string += nextDiff.string;
 						thisDiff.string = thisDiff.string.substring(nextDiff.string.length) + nextDiff.string;
 						diffs.splice(--pointer, 1);
-						nextDiff = pointer < diffs.length ? diffs.getItemAt(++pointer) as Operation : null;
+						nextDiff = pointer < diffs.length ? diffs[++pointer] as Operation : null;
 						changes = true;
 					}  // else-if statement
 				}  // if statement
